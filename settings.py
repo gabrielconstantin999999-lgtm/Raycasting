@@ -5,7 +5,7 @@ TILESIZE = 32
 SCREEN_W = TILESIZE * 48
 SCREEN_H = TILESIZE * 27
 
-
+NUM_RAYS = 10
 
 FOV = 60 * (math.pi/180)
 

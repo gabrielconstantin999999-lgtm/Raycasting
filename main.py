@@ -17,5 +17,6 @@ while True:
 
     map.draw(screen)
     player.update(screen)
+    ray.detect_walls(screen, player.x, player.y, player.rotation_angle, player.direction)
     ray.cast(screen, player.x, player.y, player.rotation_angle)
     pygame.display.update()

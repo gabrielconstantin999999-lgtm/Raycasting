@@ -5,8 +5,18 @@ class Player:
     def __init__(self):
         self.x = 500
         self.y = 500
-        self.rotation_angle = 45 * (math.pi/180)
+        self.rotation_angle = 0 * (math.pi/180)
         self.rotation = 1 * (math.pi/180)
+        self.direction = None
+        if 90 * (math.pi/180) < self.rotation_angle < 270 * (math.pi/180):
+              self.direction = 'left'
+        if not 90 * (math.pi/180) < self.rotation_angle < 270 * (math.pi/180):
+              self.direction = 'right'
+        if 0 * (math.pi/180) < self.rotation_angle < 180 * (math.pi/180):
+              self.direction = 'up'
+        if not 0 * (math.pi/180) < self.rotation_angle < 180 * (math.pi/180):
+              self.direction = 'down'
+        
     def update(self,screen):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
