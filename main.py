@@ -14,9 +14,9 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-
+    screen.fill((0,0,0))
     map.draw(screen)
     player.update(screen)
-    ray.detect_walls(screen, player.x, player.y, player.rotation_angle, player.direction)
+    ray.detect_walls(screen, player.x, player.y, player.rotation_angle, player.direction_x, player.direction_y, map)
     ray.cast(screen, player.x, player.y, player.rotation_angle)
     pygame.display.update()

@@ -35,9 +35,9 @@ class Map:
         for x in range(len(self.grid)):
             for y in range(len(self.grid[0])):
                 if self.grid[x][y] == 0:
-                    pygame.draw.rect(screen, (0,0,0), (y * TILESIZE, x * TILESIZE, TILESIZE, TILESIZE))
+                    pygame.draw.rect(screen, (40,40,40), (y * TILESIZE, x * TILESIZE, TILESIZE-1, TILESIZE-1))
                 if self.grid[x][y] == 1:
-                    pygame.draw.rect(screen, (169,169,169), (y * TILESIZE, x * TILESIZE, TILESIZE, TILESIZE))
+                    pygame.draw.rect(screen, (169,169,169), (y * TILESIZE, x * TILESIZE, TILESIZE -1, TILESIZE -1))
     def has_wall_at(self,x,y):
         if self.grid[x][y] == 0:
             return False
