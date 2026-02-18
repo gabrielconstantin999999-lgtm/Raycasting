@@ -6,39 +6,44 @@ from player import Player
 
 class Ray:
     def __init__(self):
-        self.wall_horizontal = 100,100
+        self.wall_horizontal = None
     def detect_walls(self, screen, px, py, pangle, pdx, pdy, map):
+        if math.tan(pangle) != 0:
+            found_horizontal = False
+            if pdy == 'up':
+                o = py % TILESIZE
+                a = o / (math.tan(pangle))
+                hpx = px + a 
+                hpy = py - o
+                while found_horizontal == False:
+                    if map.has_wall_at(int(hpy // TILESIZE - 1), int(hpx//TILESIZE)) == True:
+                        self.wall_horizontal = (hpx, hpy)
+                        found_horizontal = True
+                    else:
+                        if pdx == 'right':
+                            hpx += a
+                        if pdx == 'left':
+                            hpx -= a
+                        hpy -= TILESIZE
 
-        found_horizontal = False
-        if pdy == 'up':
-            y_horizontal = py % TILESIZE + math.floor(py)
-            x_horizontal = math.tan(pangle) * (y_horizontal)
-            while found_horizontal == False:
-                closest_horizontal_point = x_horizontal, y_horizontal
-                if map.has_wall_at(int(y_horizontal // TILESIZE - 1), int(x_horizontal//TILESIZE)) == True:
-                    self.wall_horizontal = closest_horizontal_point
-                    found_horizontal = True
-                else:
-                    y_horizontal -= TILESIZE
-                    if pdx == 'right':
-                        x_horizontal += math.tan(pangle) * (y_horizontal)
-                    if pdx == 'left':
-                        x_horizontal -= math.tan(pangle) * (y_horizontal)
-
-        if pdy == 'down':
-            y_horizontal = math.ceil(py) - py
-            x_horizontal = math.tan(pangle) * (y_horizontal)
-            while found_horizontal == False:
-                closest_horizontal_point = x_horizontal, y_horizontal
-                if map.has_wall_at(int(y_horizontal // TILESIZE), int(x_horizontal//TILESIZE)) == True:
-                    self.wall_horizontal = closest_horizontal_point
-                    found_horizontal = True
-                else:
-                    y_horizontal += TILESIZE
-                    if pdx == 'right':
-                        x_horizontal += math.tan(pangle) * (y_horizontal)
-                    if pdx == 'left':
-                        x_horizontal -= math.tan(pangle) * (y_horizontal)
+            if pdy == 'down':
+                o = TILESIZE - (py % TILESIZE)
+                a = o / (math.tan(pangle))
+                hpx = px + a 
+                hpy =  py - o
+                while found_horizontal == False:
+                    if map.has_wall_at(int(hpy // TILESIZE), int(hpx//TILESIZE)) == True:
+                        self.wall_horizontal = (hpx, hpy)
+                        found_horizontal = True
+                    else:
+                        if pdx == 'right':
+                            hpx += a
+                        if pdx == 'left':
+                            hpx -= a
+                        hpy += TILESIZE
+            print(int(hpx//TILESIZE))
+            print(o, a, hpx, hpy)
+            print(self.wall_horizontal)
         
 
 
@@ -47,5 +52,5 @@ class Ray:
 
 
     def cast(self, screen, px, py, pangle):
-        pygame.draw.line(screen,(0,0,255),(px, py), (px + math.cos(pangle) * 999999999, py - math.sin(pangle) * 999999999))
+        pygame.draw.line(screen,(0,0,255),(px, py), (px + math.cos(pangle) * 99, py - math.sin(pangle) * 99))
     

@@ -38,7 +38,5 @@ class Player:
         print(f"angle: {self.rotation_angle}")
         print(f"x: {self.x}")
         print(f"y: {self.y}")
-        print(f"cosx: {math.cos(self.rotation_angle)}")
-        print(f"siny: {math.sin(self.rotation_angle)}")
 
 
