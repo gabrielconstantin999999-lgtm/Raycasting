@@ -9,8 +9,10 @@ screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 map = Map()
 player = Player()
 ray = Ray()
+clock = pygame.time.Clock()
 
 while True:
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()

@@ -8,6 +8,7 @@ class Ray:
     def __init__(self):
         self.wall_horizontal = None
     def detect_walls(self, screen, px, py, pangle, pdx, pdy, map):
+        print(pdy)
         if math.tan(pangle) != 0:
             found_horizontal = False
             if pdy == 'up':
@@ -16,34 +17,28 @@ class Ray:
                 hpx = px + a 
                 hpy = py - o
                 while found_horizontal == False:
+                    print(f"grid coords: {int(hpx // TILESIZE - 1), int(hpy//TILESIZE)}")
                     if map.has_wall_at(int(hpy // TILESIZE - 1), int(hpx//TILESIZE)) == True:
                         self.wall_horizontal = (hpx, hpy)
                         found_horizontal = True
                     else:
-                        if pdx == 'right':
-                            hpx += a
-                        if pdx == 'left':
-                            hpx -= a
                         hpy -= TILESIZE
 
             if pdy == 'down':
                 o = TILESIZE - (py % TILESIZE)
                 a = o / (math.tan(pangle))
                 hpx = px + a 
-                hpy =  py - o
+                hpy =  py + o
                 while found_horizontal == False:
+                    print(f"grid coords: {int(hpx // TILESIZE), int(hpy//TILESIZE)}")
+                    print(f"point: {hpx, hpy}")
                     if map.has_wall_at(int(hpy // TILESIZE), int(hpx//TILESIZE)) == True:
                         self.wall_horizontal = (hpx, hpy)
                         found_horizontal = True
                     else:
-                        if pdx == 'right':
-                            hpx += a
-                        if pdx == 'left':
-                            hpx -= a
                         hpy += TILESIZE
-            print(int(hpx//TILESIZE))
-            print(o, a, hpx, hpy)
-            print(self.wall_horizontal)
+            
+
         
 
 
