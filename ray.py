@@ -43,6 +43,29 @@ class Ray:
                         h_x_counter += TILESIZE/tan
                     elif pdx == 'left':
                         h_x_counter -= TILESIZE/tan
+        if pdy == 'down':
+            opposite = TILESIZE - (py % TILESIZE)
+            adjacent = opposite / tan
+            if pdx == 'right':
+                h_x_counter += adjacent
+            elif pdx == 'left':
+                h_x_counter -= adjacent
+            h_y_counter += opposite
+            print(f"adjacent:{adjacent}")
+            print(f"opposite:{opposite}")
+            while found_h == False:
+                print("new loop")
+                if map.has_wall_at(int(h_y_counter//TILESIZE), int(h_x_counter//TILESIZE)):
+                    horizontal_point = (h_x_counter, h_y_counter)
+                    print(f"hp:{horizontal_point}")
+                    print(int(h_x_counter//TILESIZE),int(h_y_counter//TILESIZE))
+                    found_h = True 
+                else:
+                    h_y_counter += TILESIZE
+                    if pdx == 'right':
+                        h_x_counter += TILESIZE/tan
+                    elif pdx == 'left':
+                        h_x_counter -= TILESIZE/tan
         pygame.draw.line(screen, (255,255,255), (px,py), (h_x_counter, h_y_counter), 2)
                 
             
