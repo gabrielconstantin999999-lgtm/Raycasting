@@ -18,8 +18,11 @@ class Ray:
         tan = abs(math.tan(pangle))
         print("start")
         found_h = False
+        found_v = False
         h_x_counter = px
         h_y_counter = py
+        v_x_counter = px
+        v_y_counter = py
         if pdy == 'up':
             opposite = py % TILESIZE
             adjacent = opposite / tan
@@ -66,7 +69,56 @@ class Ray:
                         h_x_counter += TILESIZE/tan
                     elif pdx == 'left':
                         h_x_counter -= TILESIZE/tan
-        pygame.draw.line(screen, (255,255,255), (px,py), (h_x_counter, h_y_counter), 2)
+
+        if pdx == 'right':
+            adjacent = TILESIZE - (px % TILESIZE)
+            opposite = adjacent * tan
+            
+            if pdy == 'up':
+                v_y_counter -= opposite
+            elif pdy == 'down':
+                v_y_counter += opposite
+            v_x_counter += adjacent
+            print(f"adjacent:{adjacent}")
+            print(f"opposite:{opposite}")
+            while found_v == False:
+                print("new loop")
+                if map.has_wall_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE)):
+                    vertical_point = (v_x_counter, v_y_counter)
+                    print(f"hp:{horizontal_point}")
+                    print(int(v_x_counter//TILESIZE),int(v_y_counter//TILESIZE))
+                    found_v = True 
+                else:
+                    v_x_counter += TILESIZE
+                    if pdy == 'down':
+                        v_y_counter += TILESIZE * tan
+                    elif pdy == 'up':
+                        v_y_counter -= TILESIZE * tan
+        if pdx == 'left':
+            adjacent = px % TILESIZE
+            opposite = adjacent * tan
+            
+            if pdy == 'up':
+                v_y_counter -= opposite
+            elif pdy == 'down':
+                v_y_counter += opposite
+            v_x_counter -= adjacent
+            print(f"adjacent:{adjacent}")
+            print(f"opposite:{opposite}")
+            while found_v == False:
+                print("new loop")
+                if map.has_wall_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE) -1):
+                    vertical_point = (v_x_counter, v_y_counter)
+                    print(f"vp:{vertical_point}")
+                    print(int(v_x_counter//TILESIZE),int(v_y_counter//TILESIZE))
+                    found_v = True 
+                else:
+                    v_x_counter -= TILESIZE
+                    if pdy == 'down':
+                        v_y_counter += TILESIZE * tan
+                    elif pdy == 'up':
+                        v_y_counter -= TILESIZE * tan
+        pygame.draw.line(screen, (255,255,255), (px,py), (v_x_counter, v_y_counter), 2)
                 
             
     def cast(self, screen, px, py, pangle):
