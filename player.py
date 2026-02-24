@@ -5,7 +5,7 @@ class Player:
     def __init__(self):
         self.x = 500
         self.y = 500
-        self.rotation_angle = 0 * (math.pi/180)
+        self.rotation_angle = 225 * (math.pi/180)
         self.rotation = 1 * (math.pi/180)
         self.direction_y = None
         self.direction_x = None

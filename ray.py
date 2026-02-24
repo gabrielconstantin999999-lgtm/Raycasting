@@ -7,12 +7,6 @@ def distance(x1, x2, y1, y2):
     return math.sqrt((x2-x1)**2 + (y2-y1)**2)
 class Ray:
     def __init__(self):
-        self.horizontal_point = None
-        self.wall_horizontal_x = None
-        self.wall_horizontal_y = None
-        self.wall_vertical_x = None
-        self.wall_vertical_y = None
-        self.closest_distance = None
         self.closest_point = None
     def detect_walls(self, screen, px, py, pangle, pdx, pdy, map):
         tan = abs(math.tan(pangle))
@@ -23,6 +17,7 @@ class Ray:
         h_y_counter = py
         v_x_counter = px
         v_y_counter = py
+        if tan == 0: tan = math.tan(1 * (math.pi/180))
         if pdy == 'up':
             opposite = py % TILESIZE
             adjacent = opposite / tan
@@ -118,8 +113,15 @@ class Ray:
                         v_y_counter += TILESIZE * tan
                     elif pdy == 'up':
                         v_y_counter -= TILESIZE * tan
-        pygame.draw.line(screen, (255,255,255), (px,py), (v_x_counter, v_y_counter), 2)
                 
-            
+        
+
+        hd = distance(px, h_x_counter, py, h_y_counter)
+        vd = distance(px, v_x_counter, py, v_y_counter)
+
+        if hd < vd:
+            self.closest_point = horizontal_point
+        else:
+            self.closest_point = vertical_point
     def cast(self, screen, px, py, pangle):
         pygame.draw.line(screen,(0,0,255),(px, py), (self.closest_point))

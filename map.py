@@ -1,5 +1,7 @@
 from settings import *
 import pygame
+
+
 class Map:
     def __init__(self):
         self.grid = [
@@ -31,6 +33,7 @@ class Map:
             [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
         ]
+        self.text_font = pygame.font.SysFont(None, 16)
     def draw(self, screen):
         for x in range(len(self.grid)):
             for y in range(len(self.grid[0])):
@@ -38,6 +41,8 @@ class Map:
                     pygame.draw.rect(screen, (40,40,40), (y * TILESIZE, x * TILESIZE, TILESIZE-1, TILESIZE-1))
                 if self.grid[x][y] == 1:
                     pygame.draw.rect(screen, (169,169,169), (y * TILESIZE, x * TILESIZE, TILESIZE -1, TILESIZE -1))
+                coords = self.text_font.render(f"{y}, {x}", True, (255,255,255))
+                screen.blit(coords, (y * TILESIZE, x * TILESIZE))
     def has_wall_at(self,x,y):
         if x < 0 or x >= len(self.grid) or y < 0 or y >= len(self.grid[0]):
             return True   
