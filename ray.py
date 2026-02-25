@@ -115,9 +115,10 @@ class Ray:
                         v_y_counter -= TILESIZE * tan
                 
         
-
-        hd = distance(px, h_x_counter, py, h_y_counter)
-        vd = distance(px, v_x_counter, py, v_y_counter)
+        if found_h:
+            hd = distance(px, h_x_counter, py, h_y_counter)
+        if found_v:
+            vd = distance(px, v_x_counter, py, v_y_counter)
 
         if hd < vd:
             self.closest_point = horizontal_point

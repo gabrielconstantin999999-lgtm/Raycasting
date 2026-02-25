@@ -3,6 +3,7 @@ from settings import *
 from map import Map
 from player import Player
 from ray import Ray
+from raycaster import Raycaster
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
@@ -10,6 +11,8 @@ map = Map()
 player = Player()
 ray = Ray()
 clock = pygame.time.Clock()
+raycaster = Raycaster()
+
 
 while True:
     clock.tick(60)
@@ -19,6 +22,7 @@ while True:
     screen.fill((0,0,0))
     map.draw(screen)
     player.update(screen)
+    #raycaster.cast_rays(screen, ray, player, map)
     ray.detect_walls(screen, player.x, player.y, player.rotation_angle, player.direction_x, player.direction_y, map)
     ray.cast(screen, player.x, player.y, player.rotation_angle)
     pygame.display.update()
