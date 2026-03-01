@@ -25,4 +25,5 @@ while True:
     #raycaster.cast_rays(screen, ray, player, map)
     ray.detect_walls(screen, player.x, player.y, player.rotation_angle, player.direction_x, player.direction_y, map)
     ray.cast(screen, player.x, player.y, player.rotation_angle)
+    print(player.x, player.y, player.rotation_angle, player.direction_x, player.direction_y, math.tan(player.rotation_angle))
     pygame.display.update()

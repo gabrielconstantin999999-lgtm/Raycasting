@@ -10,14 +10,12 @@ class Ray:
         self.closest_point = None
     def detect_walls(self, screen, px, py, pangle, pdx, pdy, map):
         tan = abs(math.tan(pangle))
-        print("start")
         found_h = False
         found_v = False
         h_x_counter = px
         h_y_counter = py
         v_x_counter = px
         v_y_counter = py
-        if tan == 0: tan = math.tan(1 * (math.pi/180))
         if pdy == 'up':
             opposite = py % TILESIZE
             adjacent = opposite / tan
@@ -26,14 +24,9 @@ class Ray:
             elif pdx == 'left':
                 h_x_counter -= adjacent
             h_y_counter -= opposite
-            print(f"adjacent:{adjacent}")
-            print(f"opposite:{opposite}")
             while found_h == False:
-                print("new loop")
                 if map.has_wall_at(int(h_y_counter//TILESIZE) - 1, int(h_x_counter//TILESIZE)):
                     horizontal_point = (h_x_counter, h_y_counter)
-                    print(f"hp:{horizontal_point}")
-                    print(int(h_x_counter//TILESIZE),int(h_y_counter//TILESIZE) - 1)
                     found_h = True 
                 else:
                     h_y_counter -= TILESIZE
@@ -49,14 +42,9 @@ class Ray:
             elif pdx == 'left':
                 h_x_counter -= adjacent
             h_y_counter += opposite
-            print(f"adjacent:{adjacent}")
-            print(f"opposite:{opposite}")
             while found_h == False:
-                print("new loop")
                 if map.has_wall_at(int(h_y_counter//TILESIZE), int(h_x_counter//TILESIZE)):
                     horizontal_point = (h_x_counter, h_y_counter)
-                    print(f"hp:{horizontal_point}")
-                    print(int(h_x_counter//TILESIZE),int(h_y_counter//TILESIZE))
                     found_h = True 
                 else:
                     h_y_counter += TILESIZE
@@ -64,7 +52,7 @@ class Ray:
                         h_x_counter += TILESIZE/tan
                     elif pdx == 'left':
                         h_x_counter -= TILESIZE/tan
-
+        
         if pdx == 'right':
             adjacent = TILESIZE - (px % TILESIZE)
             opposite = adjacent * tan
@@ -74,14 +62,9 @@ class Ray:
             elif pdy == 'down':
                 v_y_counter += opposite
             v_x_counter += adjacent
-            print(f"adjacent:{adjacent}")
-            print(f"opposite:{opposite}")
             while found_v == False:
-                print("new loop")
                 if map.has_wall_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE)):
                     vertical_point = (v_x_counter, v_y_counter)
-                    print(f"hp:{horizontal_point}")
-                    print(int(v_x_counter//TILESIZE),int(v_y_counter//TILESIZE))
                     found_v = True 
                 else:
                     v_x_counter += TILESIZE
@@ -98,14 +81,9 @@ class Ray:
             elif pdy == 'down':
                 v_y_counter += opposite
             v_x_counter -= adjacent
-            print(f"adjacent:{adjacent}")
-            print(f"opposite:{opposite}")
             while found_v == False:
-                print("new loop")
                 if map.has_wall_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE) -1):
                     vertical_point = (v_x_counter, v_y_counter)
-                    print(f"vp:{vertical_point}")
-                    print(int(v_x_counter//TILESIZE),int(v_y_counter//TILESIZE))
                     found_v = True 
                 else:
                     v_x_counter -= TILESIZE

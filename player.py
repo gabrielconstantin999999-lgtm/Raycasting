@@ -5,7 +5,7 @@ class Player:
     def __init__(self):
         self.x = 500
         self.y = 500
-        self.rotation_angle = 225 * (math.pi/180)
+        self.rotation_angle = 180 * (math.pi/180)
         self.rotation = 1 * (math.pi/180)
         self.direction_y = None
         self.direction_x = None
@@ -32,11 +32,7 @@ class Player:
                 self.rotation_angle -= self.rotation
         if keys[pygame.K_LEFT]:
                 self.rotation_angle += self.rotation
-        if abs(self.rotation_angle) >= 2 * math.pi:
-              self.rotation_angle = 0
+        self.rotation_angle %= 2 * math.pi
         pygame.draw.circle(screen, (255,0,0), (self.x, self.y), 10)
-        print(f"angle: {self.rotation_angle}")
-        print(f"x: {self.x}")
-        print(f"y: {self.y}")
 
 
