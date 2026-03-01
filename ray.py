@@ -8,7 +8,18 @@ def distance(x1, x2, y1, y2):
 class Ray:
     def __init__(self):
         self.closest_point = None
-    def detect_walls(self, screen, px, py, pangle, pdx, pdy, map):
+        self.distance = None
+    def detect_walls(self, screen, px, py, pangle,map):
+        if 90 * (math.pi/180) < pangle < 270 * (math.pi/180):
+              pdx = 'left'
+        if not 90 * (math.pi/180) < pangle < 270 * (math.pi/180):
+              pdx = 'right'
+        if 0 * (math.pi/180) < pangle < 180 * (math.pi/180):
+              pdy = 'up'
+        if not 0 * (math.pi/180) < pangle < 180 * (math.pi/180):
+              pdy = 'down'
+        hd = float('inf')
+        vd = float('inf')
         tan = abs(math.tan(pangle))
         found_h = False
         found_v = False
@@ -100,7 +111,10 @@ class Ray:
 
         if hd < vd:
             self.closest_point = horizontal_point
+            self.distance = hd
         else:
             self.closest_point = vertical_point
-    def cast(self, screen, px, py, pangle):
-        pygame.draw.line(screen,(0,0,255),(px, py), (self.closest_point))
+            self.distance = vd
+    def cast(self, screen, px, py):
+        pass
+        #pygame.draw.line(screen,(0,0,255),(px, py), (self.closest_point))
