@@ -9,7 +9,7 @@ class Player:
         self.rotation = 1 * (math.pi/180)
         self.direction_y = None
         self.direction_x = None
-        self.speed = 5
+        self.speed = 2
         
     def update(self,screen):
         keys = pygame.key.get_pressed()

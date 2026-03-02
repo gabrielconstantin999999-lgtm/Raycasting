@@ -21,6 +21,7 @@ class Ray:
         hd = float('inf')
         vd = float('inf')
         tan = abs(math.tan(pangle))
+        if tan == 0: tan = abs(math.tan(pangle + 0.1))
         found_h = False
         found_v = False
         h_x_counter = px

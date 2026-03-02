@@ -13,7 +13,7 @@ class Raycaster:
             ray.detect_walls(screen, player.x, player.y,angle,map)
             ray.cast(screen, player.x, player.y)
             distance = ray.distance
-            line_height = SCREEN_H / distance * 200
-            line_width = SCREEN_W / RES * 100
-            pygame.draw.rect(screen, (255,255,255), (x * TILESIZE, distance * 0.5, line_width, line_height))
+            line_height = SCREEN_H / distance * 45
+            line_width = SCREEN_W / NUM_RAYS
+            pygame.draw.rect(screen, (255,255,255), (x * line_width, SCREEN_H/2 - line_height/2, line_width, line_height))
 
