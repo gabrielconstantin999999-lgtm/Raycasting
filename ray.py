@@ -9,17 +9,23 @@ class Ray:
     def __init__(self):
         self.closest_point = None
         self.distance = None
-    def detect_walls(self, screen, px, py, pangle,map):
+        self.pdx = None
+        self.pdy = None
+        self.hd = float('inf')
+        self.vd = float('inf')
+        self.v = False
+        self.h = False
+    def detect_walls(self, screen, px, py, pangle, map):
+        self.v = False
+        self.h = False
         if 90 * (math.pi/180) < pangle < 270 * (math.pi/180):
-              pdx = 'left'
+              self.pdx = 'left'
         if not 90 * (math.pi/180) < pangle < 270 * (math.pi/180):
-              pdx = 'right'
+              self.pdx = 'right'
         if 0 * (math.pi/180) < pangle < 180 * (math.pi/180):
-              pdy = 'up'
+              self.pdy = 'up'
         if not 0 * (math.pi/180) < pangle < 180 * (math.pi/180):
-              pdy = 'down'
-        hd = float('inf')
-        vd = float('inf')
+              self.pdy = 'down'
         tan = abs(math.tan(pangle))
         if tan == 0: tan = abs(math.tan(pangle + 0.1))
         found_h = False
@@ -28,12 +34,12 @@ class Ray:
         h_y_counter = py
         v_x_counter = px
         v_y_counter = py
-        if pdy == 'up':
+        if self.pdy == 'up':
             opposite = py % TILESIZE
             adjacent = opposite / tan
-            if pdx == 'right':
+            if self.pdx == 'right':
                 h_x_counter += adjacent
-            elif pdx == 'left':
+            elif self.pdx == 'left':
                 h_x_counter -= adjacent
             h_y_counter -= opposite
             while found_h == False:
@@ -42,16 +48,16 @@ class Ray:
                     found_h = True 
                 else:
                     h_y_counter -= TILESIZE
-                    if pdx == 'right':
+                    if self.pdx == 'right':
                         h_x_counter += TILESIZE/tan
-                    elif pdx == 'left':
+                    elif self.pdx == 'left':
                         h_x_counter -= TILESIZE/tan
-        if pdy == 'down':
+        if self.pdy == 'down':
             opposite = TILESIZE - (py % TILESIZE)
             adjacent = opposite / tan
-            if pdx == 'right':
+            if self.pdx == 'right':
                 h_x_counter += adjacent
-            elif pdx == 'left':
+            elif self.pdx == 'left':
                 h_x_counter -= adjacent
             h_y_counter += opposite
             while found_h == False:
@@ -60,18 +66,18 @@ class Ray:
                     found_h = True 
                 else:
                     h_y_counter += TILESIZE
-                    if pdx == 'right':
+                    if self.pdx == 'right':
                         h_x_counter += TILESIZE/tan
-                    elif pdx == 'left':
+                    elif self.pdx == 'left':
                         h_x_counter -= TILESIZE/tan
         
-        if pdx == 'right':
+        if self.pdx == 'right':
             adjacent = TILESIZE - (px % TILESIZE)
             opposite = adjacent * tan
             
-            if pdy == 'up':
+            if self.pdy == 'up':
                 v_y_counter -= opposite
-            elif pdy == 'down':
+            elif self.pdy == 'down':
                 v_y_counter += opposite
             v_x_counter += adjacent
             while found_v == False:
@@ -80,17 +86,17 @@ class Ray:
                     found_v = True 
                 else:
                     v_x_counter += TILESIZE
-                    if pdy == 'down':
+                    if self.pdy == 'down':
                         v_y_counter += TILESIZE * tan
-                    elif pdy == 'up':
+                    elif self.pdy == 'up':
                         v_y_counter -= TILESIZE * tan
-        if pdx == 'left':
+        if self.pdx == 'left':
             adjacent = px % TILESIZE
             opposite = adjacent * tan
             
-            if pdy == 'up':
+            if self.pdy == 'up':
                 v_y_counter -= opposite
-            elif pdy == 'down':
+            elif self.pdy == 'down':
                 v_y_counter += opposite
             v_x_counter -= adjacent
             while found_v == False:
@@ -99,23 +105,25 @@ class Ray:
                     found_v = True 
                 else:
                     v_x_counter -= TILESIZE
-                    if pdy == 'down':
+                    if self.pdy == 'down':
                         v_y_counter += TILESIZE * tan
-                    elif pdy == 'up':
+                    elif self.pdy == 'up':
                         v_y_counter -= TILESIZE * tan
                 
         
         if found_h:
-            hd = distance(px, h_x_counter, py, h_y_counter)
+            self.hd = distance(px, h_x_counter, py, h_y_counter)
         if found_v:
-            vd = distance(px, v_x_counter, py, v_y_counter)
+            self.vd = distance(px, v_x_counter, py, v_y_counter)
 
-        if hd < vd:
+        if self.hd < self.vd:
             self.closest_point = horizontal_point
-            self.distance = hd
+            self.distance = self.hd
+            self.h = True
         else:
             self.closest_point = vertical_point
-            self.distance = vd
+            self.distance = self.vd
+            self.v = True
     def cast(self, screen, px, py):
         pass
         #pygame.draw.line(screen,(0,0,255),(px, py), (self.closest_point))
