@@ -6,11 +6,12 @@ from player import Player
 
 
 class Raycaster:
-    def cast_rays(self, screen, ray, player, map):
+    def cast_rays(self, screen, ray, player, player2, map):
         for x in range(int(NUM_RAYS)):
             angle = player.rotation_angle - FOV/2 + x * FOV/NUM_RAYS
             angle %= 2 * math.pi
-            ray.detect_walls(screen, player.x, player.y,angle,map)
+            ray.detect_walls(player.x, player.y,angle,map)
+            ray.detect_player(screen, player, player2)
             ray.cast(screen, player.x, player.y)
             distance = ray.distance * math.cos(angle - player.rotation_angle)
             line_height = SCREEN_H / distance * 45
