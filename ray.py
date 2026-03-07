@@ -125,12 +125,16 @@ class Ray:
             self.closest_point = vertical_point
             self.distance = self.vd
             self.v = True
-        elif pangle - FOV/2 < math.atan((player_y - player2_y)/(player2_x - player_x)) < pangle - FOV/2 and distance(player_x, player_y, self.closest_point[0], self.closest_point[1]) > distance(player_x, player_y, player2_x, player2_y):
+        elif pangle - FOV/2 < abs(math.atan((player_y - player2_y)/(player2_x - player_x))) < pangle + FOV/2 and distance(player_x, player_y, self.closest_point[0], self.closest_point[1]) > distance(player_x, player_y, player2_x, player2_y):
             self.closest_point = player2_x, player2_y
             enemy_w = SCREEN_W / NUM_RAYS
             enemy_h = SCREEN_H / distance(player_x, player_y, player2_x, player2_y) * 18
             enemy_image = pygame.transform.scale(pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycastplayer.png"), (enemy_w, enemy_h))
             screen.blit(enemy_image, [rnum * (SCREEN_W/NUM_RAYS) - enemy_w/2, SCREEN_H/2 - enemy_h/2]) 
+        print("1",pangle - FOV/2)
+        print(abs(math.atan((player_y - player2_y)/(player2_x - player_x))) )
+        print(pangle + FOV/2)
+        print(pangle - FOV/2 < abs(math.atan((player_y - player2_y)/(player_x - player2_x))) < pangle + FOV/2 )
     
     def detect_player(self, screen, player, player2):
         dx = player2.x - player.x

@@ -35,5 +35,6 @@ while True:
     #raycaster.cast_rays(screen, ray, player1, map)
     #ray.detect_walls(screen, player.x, player.y, player.rotation_angle, player.direction_x, player.direction_y, map)
     #ray.cast(screen, player.x, player.y, player.rotation_angle)
-    print(ray.distance)
+    #print(ray.distance)
+    
     pygame.display.update()
