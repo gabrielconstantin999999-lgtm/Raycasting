@@ -13,7 +13,7 @@ class Ray:
         self.direction_y = None
         self.hd = float('inf')
         self.vd = float('inf')
-    def detect_walls(self, player_x, player_y, angle, map):
+    def detect_walls(self, screen, player_x, player_y,player2_x, player2_y, pangle,angle, map, rnum):
         if 90 * (math.pi/180) < angle < 270 * (math.pi/180):
               self.direction_x = 'left'
         if not 90 * (math.pi/180) < angle < 270 * (math.pi/180):
@@ -121,10 +121,17 @@ class Ray:
             self.closest_point = horizontal_point
             self.distance = self.hd
             self.h = True
-        else:
+        elif self.hd > self.vd:
             self.closest_point = vertical_point
             self.distance = self.vd
             self.v = True
+        elif pangle - FOV/2 < math.atan((player_y - player2_y)/(player2_x - player_x)) < pangle - FOV/2 and distance(player_x, player_y, self.closest_point[0], self.closest_point[1]) > distance(player_x, player_y, player2_x, player2_y):
+            self.closest_point = player2_x, player2_y
+            enemy_w = SCREEN_W / NUM_RAYS
+            enemy_h = SCREEN_H / distance(player_x, player_y, player2_x, player2_y) * 18
+            enemy_image = pygame.transform.scale(pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycastplayer.png"), (enemy_w, enemy_h))
+            screen.blit(enemy_image, [rnum * (SCREEN_W/NUM_RAYS) - enemy_w/2, SCREEN_H/2 - enemy_h/2]) 
+    
     def detect_player(self, screen, player, player2):
         dx = player2.x - player.x
         dy = player2.y - player.y
@@ -135,10 +142,13 @@ class Ray:
         screen_x = SCREEN_W/2 + ey/ex * (SCREEN_W / (2 * math.tan(FOV/2)))
         start_x = screen_x - SCREEN_W/2
         end_x = screen_x + SCREEN_W/2
-        player_height = SCREEN_H / ex * TILESIZE
-        player_width = SCREEN_W / NUM_RAYS
-        print("screenx",SCREEN_W/2 + ey/ex * (SCREEN_W / (2 * math.tan(FOV/2))))
-        pygame.draw.rect(screen, (255,0,0), (start_x, SCREEN_H/2 - player_height/2, 500, 500))
+        player_height = SCREEN_H / abs(ex) * TILESIZE
+        player_width = SCREEN_W / NUM_RAYS * 50
+        print("ex",ex)
+        print("pwandh: ", player_width, player_height)
+        enemy_image = pygame.transform.scale(pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycastplayer.png"), (player_width, player_height))
+        screen.blit(enemy_image, [start_x, SCREEN_H/2 - player_height/2]) 
+        #pygame.draw.rect(screen, (255,0,0), (start_x, SCREEN_H/2 - player_height/2, 500, 500))
          
     def cast(self, screen, px, py):
         pass

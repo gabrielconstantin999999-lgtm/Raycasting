@@ -17,7 +17,7 @@ raycaster = Raycaster()
 pov_switch = 1
 while True:
     clock.tick(60)
-    screen.fill((0,0,0))
+    screen.fill((232, 195, 195))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
