@@ -23,7 +23,7 @@ while True:
             pygame.quit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_p:
-                pov_switch *= -1
+                pov_switch *= -1 
     
     if pov_switch == 1:
         player1.update(screen, map)

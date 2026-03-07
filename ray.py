@@ -126,9 +126,20 @@ class Ray:
             self.distance = self.vd
             self.v = True
     def detect_player(self, screen, player, player2):
-        print(self.closest_point[0], player.x, player2.x, self.closest_point[1],player.y, player2.y)
-        if (math.atan(self.closest_point[1] - player.y/self.closest_point[0] - player.x)) * math.pi/180 == player2.rotation_angle:
-            pygame.draw.rect(screen, (255,0,0), (400, 400, 100, 100))
+        dx = player2.x - player.x
+        dy = player2.y - player.y
+        ex = math.cos(player.rotation_angle) * dx + math.sin(player.rotation_angle) * dy
+        ey = -math.sin(player.rotation_angle) * dx + math.cos(player.rotation_angle) * dy
+        if ex <= 0:
+            pass
+        screen_x = SCREEN_W/2 + ey/ex * (SCREEN_W / (2 * math.tan(FOV/2)))
+        start_x = screen_x - SCREEN_W/2
+        end_x = screen_x + SCREEN_W/2
+        player_height = SCREEN_H / ex * TILESIZE
+        player_width = SCREEN_W / NUM_RAYS
+        print("screenx",SCREEN_W/2 + ey/ex * (SCREEN_W / (2 * math.tan(FOV/2))))
+        pygame.draw.rect(screen, (255,0,0), (start_x, SCREEN_H/2 - player_height/2, 500, 500))
+         
     def cast(self, screen, px, py):
         pass
         #pygame.draw.line(screen,(0,0,255),(px, py), (self.closest_point))
