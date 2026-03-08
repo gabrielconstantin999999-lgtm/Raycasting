@@ -2,8 +2,14 @@ from settings import *
 import pygame
 import math
 from map import Map
+
+def distance(x1, x2, y1, y2):
+    return math.sqrt((x2-x1)**2 + (y2-y1)**2)
 class Player:
-    def __init__(self, x, y):
+    def __init__(self, x, y, number):
+        self.number = number
+        self.x_grid = x
+        self.y_grid = y
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.rotation_angle = 90 * (math.pi/180)
@@ -12,6 +18,7 @@ class Player:
         self.direction_x = None
         self.speed = 2
         self.sens = 0.1
+        self.enemy = pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycastplayer.png")
     def update(self,screen, map):
         free_mouse = False
         keys = pygame.key.get_pressed()
@@ -51,6 +58,12 @@ class Player:
         self.rotation_angle %= 2 * math.pi
         #pygame.draw.circle(screen, (255,0,0), (self.x, self.y), 10)
         prev_x = x_change
+        map.grid[self.y_grid][self.x_grid] = self.number
+    def draw(self, screen, distance, player, player2, rnum):
+        enemy_h = int(SCREEN_H / distance(player.x, player2.x, player.y, player2.y) * TILESIZE)
+        enemy_w = enemy_h
+        enemy_image = pygame.transform.scale(self.enemy, (enemy_w, enemy_h))
+        screen.blit(enemy_image, [rnum * (SCREEN_W/NUM_RAYS) - enemy_w/2, SCREEN_H/2 - enemy_h/2])
    
        
 

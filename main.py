@@ -8,13 +8,13 @@ from raycaster import Raycaster
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 map = Map()
-player1 = Player(22, 5)
-player2 = Player(23, 6)
+player1 = Player(22, 5, 9)
+player2 = Player(23, 6, -9)
 ray = Ray()
 clock = pygame.time.Clock()
 raycaster = Raycaster()
 
-pov_switch = 1
+pov_switch = 9
 while True:
     clock.tick(60)
     screen.fill((232, 195, 195))
@@ -25,12 +25,13 @@ while True:
             if event.key == pygame.K_p:
                 pov_switch *= -1 
     
-    if pov_switch == 1:
+    if pov_switch == 9:
         player1.update(screen, map)
         raycaster.cast_rays(screen, ray, player1, player2, map)
-    else:
+    elif pov_switch == -9:
         player2.update(screen, map)
         raycaster.cast_rays(screen, ray, player2, player1, map)
+    map.update()
     #map.draw(screen)
     #raycaster.cast_rays(screen, ray, player1, map)
     #ray.detect_walls(screen, player.x, player.y, player.rotation_angle, player.direction_x, player.direction_y, map)

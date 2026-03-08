@@ -13,7 +13,7 @@ class Ray:
         self.direction_y = None
         self.hd = float('inf')
         self.vd = float('inf')
-    def detect_walls(self, screen, player_x, player_y,player2_x, player2_y, pangle,angle, map, rnum):
+    def detect_walls(self, screen, player, player_x, player_y,player2,player2_x, player2_y, pangle,angle, map, rnum):
         if 90 * (math.pi/180) < angle < 270 * (math.pi/180):
               self.direction_x = 'left'
         if not 90 * (math.pi/180) < angle < 270 * (math.pi/180):
@@ -42,6 +42,8 @@ class Ray:
                 if map.has_wall_at(int(h_y_counter//TILESIZE) - 1, int(h_x_counter//TILESIZE)):
                     horizontal_point = (h_x_counter, h_y_counter)
                     found_h = True 
+                elif map.has_player_at(int(h_y_counter//TILESIZE) - 1, int(h_x_counter//TILESIZE)):
+                    player.draw(screen, distance(player.x, player.y, h_x_counter, h_y_counter), player, player2, rnum)
                 else:
                     h_y_counter -= TILESIZE
                     if self.direction_x == 'right':
@@ -60,6 +62,8 @@ class Ray:
                 if map.has_wall_at(int(h_y_counter//TILESIZE), int(h_x_counter//TILESIZE)):
                     horizontal_point = (h_x_counter, h_y_counter)
                     found_h = True 
+                elif map.has_player_at(int(h_y_counter//TILESIZE), int(h_x_counter//TILESIZE)):
+                    player.draw(screen, distance(player.x, player.y, h_x_counter, h_y_counter), player, player2, rnum)
                 else:
                     h_y_counter += TILESIZE
                     if self.direction_x == 'right':
@@ -85,6 +89,8 @@ class Ray:
                 if map.has_wall_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE)):
                     vertical_point = (v_x_counter, v_y_counter)
                     found_v = True 
+                elif map.has_player_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE)):
+                    player.draw(screen, distance(player.x, player.y, v_x_counter, v_y_counter), player, player2, rnum)
                 else:
                     v_x_counter += TILESIZE
                     if self.direction_y == 'down':
@@ -104,6 +110,8 @@ class Ray:
                 if map.has_wall_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE) -1):
                     vertical_point = (v_x_counter, v_y_counter)
                     found_v = True 
+                elif map.has_player_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE) -1):
+                    player.draw(screen, distance(player.x, player.y, v_x_counter, v_y_counter), player, player2, rnum)
                 else:
                     v_x_counter -= TILESIZE
                     if self.direction_y == 'down':
@@ -125,19 +133,19 @@ class Ray:
             self.closest_point = vertical_point
             self.distance = self.vd
             self.v = True
-    
-    def detect_player(self, screen, player_x, player_y,player2_x, player2_y, angle,rnum):
-        if angle - FOV/2 < abs(self.tan_players) < angle + FOV/2 and distance(player_x, player_y, self.closest_point[0], self.closest_point[1]) > distance(player_x, player_y, player2_x, player2_y):
+    def detect_player(self, screen, player_x, player_y,player2_x, player2_y, angle,pangle,rnum):
+        if pangle - FOV/2 < abs(self.tan_players) < pangle + FOV/2 and distance(player_x, player_y, self.closest_point[0], self.closest_point[1]) > distance(player_x, player_y, player2_x, player2_y):
             self.tan_players = self.tan_players % math.pi - math.pi
             self.closest_point = player2_x, player2_y
-            enemy_w = SCREEN_W / NUM_RAYS
-            enemy_h = SCREEN_H / distance(player_x, player_y, player2_x, player2_y) * 18
-            enemy_image = pygame.transform.scale(pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycastplayer.png"), (enemy_w, enemy_h))
+            enemy_h = SCREEN_H / distance(player_x, player_y, player2_x, player2_y) * TILESIZE
+            enemy_w = enemy_h
+            enemy_image = pygame.transform.scale(self.enemy, (enemy_w, enemy_h))
             screen.blit(enemy_image, [rnum * (SCREEN_W/NUM_RAYS) - enemy_w/2, SCREEN_H/2 - enemy_h/2]) 
-        print("1",angle - FOV/2)
-        print(abs(self.tan_players))
-        print(angle + FOV/2)
-        print(angle - FOV/2 < abs(self.tan_players) < angle + FOV/2)
+            print("1",angle - FOV/2)
+            print(abs(self.tan_players))
+            print(angle + FOV/2)
+            print(angle - FOV/2 < abs(self.tan_players) < angle + FOV/2)
+            print(enemy_w, enemy_h)
          
     def cast(self, screen, px, py):
         pass
