@@ -43,6 +43,21 @@ class Player:
                 if map.has_wall_at(int(self.y//TILESIZE), int(self.x//TILESIZE)):
                        self.x += math.cos(self.rotation_angle) * self.speed
                        self.y -= math.sin(self.rotation_angle) * self.speed
+        if keys[pygame.K_d]:
+                self.x += math.cos(self.rotation_angle + 90*math.pi/180) * self.speed
+                self.y -= math.sin(self.rotation_angle + 90*math.pi/180) * self.speed
+                if map.has_wall_at(int(self.y//TILESIZE), int(self.x//TILESIZE)):
+                       self.x -= math.cos(self.rotation_angle - 90*math.pi/180) * self.speed
+                       self.y += math.sin(self.rotation_angle - 90*math.pi/180) * self.speed
+        if keys[pygame.K_a]:
+                self.x += math.cos(self.rotation_angle - 90*math.pi/180) * self.speed
+                self.y -= math.sin(self.rotation_angle - 90*math.pi/180) * self.speed
+                if map.has_wall_at(int(self.y//TILESIZE), int(self.x//TILESIZE)):
+                       self.x -= math.cos(self.rotation_angle + 90*math.pi/180) * self.speed
+                       self.y += math.sin(self.rotation_angle + 90*math.pi/180) * self.speed
+        print(self.rotation_angle)
+        print(self.rotation_angle + 90*math.pi/180)
+        print(self.rotation_angle - 90*math.pi/180)
         '''
         if keys[pygame.K_a]:
                self.x -= math.cos(self.rotation_angle + 90 * math.pi / 180) * self.speed
