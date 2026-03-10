@@ -43,8 +43,6 @@ class Ray:
                 if map.has_wall_at(int(h_y_counter//TILESIZE) - 1, int(h_x_counter//TILESIZE)):
                     horizontal_point = (h_x_counter, h_y_counter)
                     found_h = True 
-                elif map.has_player_at(int(h_y_counter//TILESIZE) - 1, int(h_x_counter//TILESIZE)):
-                    player.draw(screen, distance(player.x, player.y, h_x_counter, h_y_counter), player, player2, rnum)
                 else:
                     h_y_counter -= TILESIZE
                     if self.direction_x == 'right':
@@ -63,8 +61,6 @@ class Ray:
                 if map.has_wall_at(int(h_y_counter//TILESIZE), int(h_x_counter//TILESIZE)):
                     horizontal_point = (h_x_counter, h_y_counter)
                     found_h = True 
-                elif map.has_player_at(int(h_y_counter//TILESIZE), int(h_x_counter//TILESIZE)):
-                    player.draw(screen, distance(player.x, player.y, h_x_counter, h_y_counter), player, player2, rnum)
                 else:
                     h_y_counter += TILESIZE
                     if self.direction_x == 'right':
@@ -90,8 +86,6 @@ class Ray:
                 if map.has_wall_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE)):
                     vertical_point = (v_x_counter, v_y_counter)
                     found_v = True 
-                elif map.has_player_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE)):
-                    player.draw(screen, distance(player.x, player.y, v_x_counter, v_y_counter), player, player2, rnum)
                 else:
                     v_x_counter += TILESIZE
                     if self.direction_y == 'down':
@@ -111,8 +105,6 @@ class Ray:
                 if map.has_wall_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE) -1):
                     vertical_point = (v_x_counter, v_y_counter)
                     found_v = True 
-                elif map.has_player_at(int(v_y_counter//TILESIZE), int(v_x_counter//TILESIZE) -1):
-                    player.draw(screen, distance(player.x, player.y, v_x_counter, v_y_counter), player, player2, rnum)
                 else:
                     v_x_counter -= TILESIZE
                     if self.direction_y == 'down':

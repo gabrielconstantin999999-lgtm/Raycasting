@@ -80,12 +80,3 @@ class Map:
             return False
         if self.grid[x][y] == 1:
             return True
-    def has_player_at(self, x, y):
-        if x < 0 or x >= len(self.grid) or y < 0 or y >= len(self.grid[0]):
-            return   
-        if self.grid[x][y] == 9:
-            return True
-        if self.grid[x][y] == -9:
-            return True
-        else:
-            return False
