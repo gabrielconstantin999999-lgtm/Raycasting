@@ -13,7 +13,8 @@ class Ray:
         self.direction_y = None
         self.hd = float('inf')
         self.vd = float('inf')
-    def detect_walls(self, screen, player, player_x, player_y,player2,player2_x, player2_y, pangle,angle, map, rnum):
+        self.image = pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycastplayer.png")
+    def detect_walls(self,player,angle, map, rnum):
         if 90 * (math.pi/180) < angle < 270 * (math.pi/180):
               self.direction_x = 'left'
         if not 90 * (math.pi/180) < angle < 270 * (math.pi/180):
@@ -28,10 +29,10 @@ class Ray:
         #Horizontal checking
         found_h = False
         self.h = False
-        h_x_counter = player_x
-        h_y_counter = player_y
+        h_x_counter = player.x
+        h_y_counter = player.y
         if self.direction_y == 'up':
-            opposite = player_y % TILESIZE
+            opposite = player.y % TILESIZE
             adjacent = opposite / tan
             if self.direction_x == 'right':
                 h_x_counter += adjacent
@@ -51,7 +52,7 @@ class Ray:
                     elif self.direction_x == 'left':
                         h_x_counter -= TILESIZE/tan
         if self.direction_y == 'down':
-            opposite = TILESIZE - (player_y % TILESIZE)
+            opposite = TILESIZE - (player.y % TILESIZE)
             adjacent = opposite / tan
             if self.direction_x == 'right':
                 h_x_counter += adjacent
@@ -74,10 +75,10 @@ class Ray:
         #Vertical checking
         found_v = False
         self.v = False
-        v_x_counter = player_x
-        v_y_counter = player_y
+        v_x_counter = player.x
+        v_y_counter = player.y
         if self.direction_x == 'right':
-            adjacent = TILESIZE - (player_x % TILESIZE)
+            adjacent = TILESIZE - (player.x % TILESIZE)
             opposite = adjacent * tan
             
             if self.direction_y == 'up':
@@ -98,7 +99,7 @@ class Ray:
                     elif self.direction_y == 'up':
                         v_y_counter -= TILESIZE * tan
         if self.direction_x == 'left':
-            adjacent = player_x % TILESIZE
+            adjacent = player.x % TILESIZE
             opposite = adjacent * tan
             
             if self.direction_y == 'up':
@@ -118,12 +119,11 @@ class Ray:
                         v_y_counter += TILESIZE * tan
                     elif self.direction_y == 'up':
                         v_y_counter -= TILESIZE * tan
-        self.tan_players = math.atan2((player_y - player2_y),(player2_x - player_x))
         #Closest point
         if found_h:
-            self.hd = distance(player_x, h_x_counter, player_y, h_y_counter)
+            self.hd = distance(player.x, h_x_counter, player.y, h_y_counter)
         if found_v:
-            self.vd = distance(player_x, v_x_counter, player_y, v_y_counter)
+            self.vd = distance(player.x, v_x_counter, player.y, v_y_counter)
 
         if self.hd < self.vd:
             self.closest_point = horizontal_point
@@ -133,20 +133,45 @@ class Ray:
             self.closest_point = vertical_point
             self.distance = self.vd
             self.v = True
-    def detect_player(self, screen, player_x, player_y,player2_x, player2_y, angle,pangle,rnum):
-        if pangle - FOV/2 < abs(self.tan_players) < pangle + FOV/2 and distance(player_x, player_y, self.closest_point[0], self.closest_point[1]) > distance(player_x, player_y, player2_x, player2_y):
-            self.tan_players = self.tan_players % math.pi - math.pi
-            self.closest_point = player2_x, player2_y
-            enemy_h = SCREEN_H / distance(player_x, player_y, player2_x, player2_y) * TILESIZE
-            enemy_w = enemy_h
-            enemy_image = pygame.transform.scale(self.enemy, (enemy_w, enemy_h))
-            screen.blit(enemy_image, [rnum * (SCREEN_W/NUM_RAYS) - enemy_w/2, SCREEN_H/2 - enemy_h/2]) 
-            print("1",angle - FOV/2)
-            print(abs(self.tan_players))
-            print(angle + FOV/2)
-            print(angle - FOV/2 < abs(self.tan_players) < angle + FOV/2)
-            print(enemy_w, enemy_h)
-         
+    
+    def detect_player(self, screen, player, player2, wall_distances):
+        dx = player2.x - player.x
+        dy = player2.y - player.y
+        world_angle = math.atan2(-dy, dx) % (2 * math.pi)
+        relative_angle = (world_angle - player.rotation_angle + math.pi) % (2 * math.pi) - math.pi
+        
+        if abs(relative_angle) > FOV / 2:
+            return
+        
+        dist = math.sqrt(dx**2 + dy**2)
+        if dist < 10:
+            return
+        
+        screen_x = SCREEN_W/2 + (relative_angle / (FOV/2)) * (SCREEN_W/2)
+        height = int(min(SCREEN_H * 3, SCREEN_H / dist * TILESIZE))
+        width = height
+        col_start = int(screen_x - width/2)
+        top_y = SCREEN_H//2 - height//2
+
+        # CACHING:
+        # pygame.transform.scale is slow — it redraws every pixel of the image
+        # at the new size. If we call it every frame, that's 60 rescales per second.
+        # Instead we save the last scaled result and only redo it when the size changes.
+        # Size changes when dist changes i.e. player2 moves closer or further.
+        # If player2 is standing still, we reuse the same surface every frame for free.
+        if not hasattr(self, '_cached_size') or self._cached_size != (width, height):
+            # size is different from last frame — rescale and save it
+            self._cached_enemy = pygame.transform.scale(self.image, (width, height))
+            self._cached_size = (width, height)
+        # size is same as last frame — skip the rescale, use saved surface
+        enemy = self._cached_enemy
+
+        line_width = SCREEN_W / NUM_RAYS
+        for col in range(col_start, col_start + width):
+            wall_idx = int(col / line_width)
+            if 0 <= wall_idx < len(wall_distances):
+                if dist < wall_distances[wall_idx]:
+                    screen.blit(enemy, (col, top_y),area=pygame.Rect(col - col_start, 0, 1, height))
     def cast(self, screen, px, py):
         pass
         #pygame.draw.line(screen,(0,0,255),(px, py), (self.closest_point))

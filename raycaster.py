@@ -4,24 +4,26 @@ import math
 from map import Map
 from player import Player
 
-
 class Raycaster:
     def cast_rays(self, screen, ray, player, player2, map):
+        wall_distances = []
+
         for x in range(int(NUM_RAYS)):
             angle = player.rotation_angle - FOV/2 + x * FOV/NUM_RAYS
             angle %= 2 * math.pi
-            ray.detect_walls(screen, player, player.x, player.y,player2, player2.x, player2.y, player.rotation_angle, angle, map, x)
-            #ray.cast(screen, player.x, player.y)
-            distance = ray.distance * math.cos(angle - player.rotation_angle)
-            line_height = SCREEN_H / distance * TILESIZE
+            ray.detect_walls(player, angle, map, x)
+
+            corrected = ray.distance * math.cos(angle - player.rotation_angle)
+            wall_distances.append(corrected)
+
+            line_height = SCREEN_H / corrected * TILESIZE
             line_width = SCREEN_W / NUM_RAYS
-            color = 255 - distance/2
+            color = max(0, min(255, 255 - corrected/2))
+
             if ray.v:
-                color *= 2
-                if color <= 0: color = 0
-                if color >= 255: color = 255
-                pygame.draw.rect(screen, (color,color,color), (x * line_width, SCREEN_H/2 - line_height/2, line_width, line_height))
+                c = min(255, int(color * 2))
+                pygame.draw.rect(screen, (c, c, c), (x * line_width, SCREEN_H/2 - line_height/2, line_width, line_height))
             elif ray.h:
-                if color <= 0: color = 0
-                pygame.draw.rect(screen, (color,color,color), (x * line_width, SCREEN_H/2 - line_height/2, line_width, line_height))
-            #ray.detect_player(screen, player.x, player.y,player2.x, player2.y, angle,player.rotation_angle,x)
+                pygame.draw.rect(screen, (int(color), int(color), int(color)), (x * line_width, SCREEN_H/2 - line_height/2, line_width, line_height))
+
+        ray.detect_player(screen, player, player2, wall_distances)

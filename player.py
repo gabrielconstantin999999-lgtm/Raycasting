@@ -58,12 +58,7 @@ class Player:
         self.rotation_angle %= 2 * math.pi
         #pygame.draw.circle(screen, (255,0,0), (self.x, self.y), 10)
         prev_x = x_change
-        map.grid[self.y_grid][self.x_grid] = self.number
-    def draw(self, screen, distance, player, player2, rnum):
-        enemy_h = int(SCREEN_H / distance(player.x, player2.x, player.y, player2.y) * TILESIZE)
-        enemy_w = enemy_h
-        enemy_image = pygame.transform.scale(self.enemy, (enemy_w, enemy_h))
-        screen.blit(enemy_image, [rnum * (SCREEN_W/NUM_RAYS) - enemy_w/2, SCREEN_H/2 - enemy_h/2])
+    
    
        
 

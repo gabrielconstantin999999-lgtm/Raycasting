@@ -14,7 +14,7 @@ ray = Ray()
 clock = pygame.time.Clock()
 raycaster = Raycaster()
 
-pov_switch = 9
+pov_switch = 1
 while True:
     clock.tick(60)
     screen.fill((232, 195, 195))
@@ -25,10 +25,10 @@ while True:
             if event.key == pygame.K_p:
                 pov_switch *= -1 
     
-    if pov_switch == 9:
+    if pov_switch == 1:
         player1.update(screen, map)
         raycaster.cast_rays(screen, ray, player1, player2, map)
-    elif pov_switch == -9:
+    elif pov_switch == -1:
         player2.update(screen, map)
         raycaster.cast_rays(screen, ray, player2, player1, map)
     map.update()
