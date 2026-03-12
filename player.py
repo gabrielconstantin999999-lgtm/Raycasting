@@ -6,8 +6,7 @@ from map import Map
 def distance(x1, x2, y1, y2):
     return math.sqrt((x2-x1)**2 + (y2-y1)**2)
 class Player:
-    def __init__(self, x, y, number):
-        self.number = number
+    def __init__(self, x, y):
         self.x_grid = x
         self.y_grid = y
         self.x = x * TILESIZE
@@ -47,14 +46,14 @@ class Player:
                 self.x += math.cos(self.rotation_angle + 90*math.pi/180) * self.speed
                 self.y -= math.sin(self.rotation_angle + 90*math.pi/180) * self.speed
                 if map.has_wall_at(int(self.y//TILESIZE), int(self.x//TILESIZE)):
-                       self.x -= math.cos(self.rotation_angle - 90*math.pi/180) * self.speed
-                       self.y += math.sin(self.rotation_angle - 90*math.pi/180) * self.speed
+                       self.x += math.cos(self.rotation_angle - 90*math.pi/180) * self.speed
+                       self.y -= math.sin(self.rotation_angle - 90*math.pi/180) * self.speed
         if keys[pygame.K_a]:
                 self.x += math.cos(self.rotation_angle - 90*math.pi/180) * self.speed
                 self.y -= math.sin(self.rotation_angle - 90*math.pi/180) * self.speed
                 if map.has_wall_at(int(self.y//TILESIZE), int(self.x//TILESIZE)):
-                       self.x -= math.cos(self.rotation_angle + 90*math.pi/180) * self.speed
-                       self.y += math.sin(self.rotation_angle + 90*math.pi/180) * self.speed
+                       self.x += math.cos(self.rotation_angle + 90*math.pi/180) * self.speed
+                       self.y -= math.sin(self.rotation_angle + 90*math.pi/180) * self.speed
         print(self.rotation_angle)
         print(self.rotation_angle + 90*math.pi/180)
         print(self.rotation_angle - 90*math.pi/180)

@@ -8,15 +8,17 @@ from network import Network
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 map = Map()
-player1 = Player(22, 5, 9)
-player2 = Player(23, 6, -9)
+player1 = Player(22, 5)
+player2 = Player(23, 6)
 ray = Ray()
 clock = pygame.time.Clock()
 raycaster = Raycaster()
-n = Network()
+#n = Network()
 pov_switch = 1
 while True:
     clock.tick(60)
+    #n.send((player1.x,player1.y))
+    #player2.x, player2.y = n.receive()
     screen.fill((232, 195, 195))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

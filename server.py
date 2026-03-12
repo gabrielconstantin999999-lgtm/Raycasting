@@ -12,20 +12,20 @@ s.bind((server,port))
 s.listen(2)
 print("Waiting.")
 p_info = [{},{}]
-def threaded_client(conn,player):
+def threaded_client(conn, player):
     while True:
-        data = pickle.loads(conn.recv(4096))
-        if not data:
-            print("Disconnected.")
-            break
-        else:
+        try:
+            data = pickle.loads(conn.recv(4096))  # receive first
+            if not data:
+                break
             if player == 1:
-                p_info[0] = data
-                conn.sendall(pickle.dumps(p_info[1]))
+                #p_info[1] = data
+                conn.sendall(pickle.dumps(-data))  # then send
             else:
-                p_info[1] = data
-                conn.sendall(pickle.dumps(p_info[0]))
-    print("Disconnected.")
+                #p_info[0] = data
+                conn.sendall(pickle.dumps(data))
+        except:
+            break
     conn.close()
 
 

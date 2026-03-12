@@ -7,8 +7,13 @@ class Network:
         self.server = "192.168.1.128"
         self.port = 52000
         self.addr = (self.server,self.port)
+        self.client.connect(self.addr)
     def send(self,data):
-        self.client.send(pickle.dumps(data))
+        self.client.sendall(pickle.dumps(data))
     def receive(self):
-        return self.client.recv(pickle.loads(4096))
+        return pickle.loads(self.client.recv(4096))
     
+
+n = Network()
+n.send(6767676767676767)
+print(n.receive())
