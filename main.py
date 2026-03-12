@@ -4,7 +4,7 @@ from map import Map
 from player import Player
 from ray import Ray
 from raycaster import Raycaster
-
+from network import Network
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 map = Map()
@@ -13,7 +13,7 @@ player2 = Player(23, 6, -9)
 ray = Ray()
 clock = pygame.time.Clock()
 raycaster = Raycaster()
-
+n = Network()
 pov_switch = 1
 while True:
     clock.tick(60)
