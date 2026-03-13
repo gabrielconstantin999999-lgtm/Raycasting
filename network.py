@@ -14,6 +14,3 @@ class Network:
         return pickle.loads(self.client.recv(4096))
     
 
-n = Network()
-n.send(6767676767676767)
-print(n.receive())

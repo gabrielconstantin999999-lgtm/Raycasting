@@ -17,7 +17,6 @@ class Player:
         self.direction_x = None
         self.speed = 2
         self.sens = 0.1
-        self.enemy = pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycastplayer.png")
     def update(self,screen, map):
         free_mouse = False
         keys = pygame.key.get_pressed()
@@ -54,9 +53,6 @@ class Player:
                 if map.has_wall_at(int(self.y//TILESIZE), int(self.x//TILESIZE)):
                        self.x += math.cos(self.rotation_angle + 90*math.pi/180) * self.speed
                        self.y -= math.sin(self.rotation_angle + 90*math.pi/180) * self.speed
-        print(self.rotation_angle)
-        print(self.rotation_angle + 90*math.pi/180)
-        print(self.rotation_angle - 90*math.pi/180)
         '''
         if keys[pygame.K_a]:
                self.x -= math.cos(self.rotation_angle + 90 * math.pi / 180) * self.speed
