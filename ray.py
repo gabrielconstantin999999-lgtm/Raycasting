@@ -14,6 +14,7 @@ class Ray:
         self.hd = float('inf')
         self.vd = float('inf')
         self.image = pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycastplayer.png")
+        self.hit = False
     def detect_walls(self,player,angle, map, rnum):
         if 90 * (math.pi/180) < angle < 270 * (math.pi/180):
               self.direction_x = 'left'
@@ -127,6 +128,10 @@ class Ray:
             self.v = True
     
     def detect_player(self, screen, player, player2, wall_distances):
+        mouse_clicked = pygame.mouse.get_pressed()[0]
+        crosshair = (SCREEN_W/2, SCREEN_H/2)
+        kill_counter = 0
+        text_font = pygame.font.SysFont(None, 16)
         dx = player2.x - player.x
         dy = player2.y - player.y
         world_angle = math.atan2(-dy, dx) % (2 * math.pi)
@@ -164,6 +169,13 @@ class Ray:
             if 0 <= wall_idx < len(wall_distances):
                 if dist < wall_distances[wall_idx]:
                     screen.blit(enemy, (col, top_y),area=pygame.Rect(col - col_start, 0, 1, height))
+                if mouse_clicked:
+                    if col_start < crosshair[0] < col_start + width and top_y < crosshair[1] < top_y + height and dist < wall_distances[wall_idx]:
+                        test = text_font.render(f"nigga", True, (0,0,0))
+                        screen.blit(test, (500, 500))
+                        player.hit = True
+                    
+                                     
     def cast(self, screen, px, py):
         pass
         #pygame.draw.line(screen,(0,0,255),(px, py), (self.closest_point))

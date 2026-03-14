@@ -27,3 +27,4 @@ class Raycaster:
                 pygame.draw.rect(screen, (int(color), int(color), int(color)), (x * line_width, SCREEN_H/2 - line_height/2, line_width, line_height))
 
         ray.detect_player(screen, player, player2, wall_distances)
+        

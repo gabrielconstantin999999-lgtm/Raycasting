@@ -14,6 +14,18 @@ ray = Ray()
 clock = pygame.time.Clock()
 raycaster = Raycaster()
 n = Network()
+gun = pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycasting_gun.png")
+gun2 = pygame.transform.scale(gun, (640, 320))
+
+def draw_utils(gun,screen, health, ammo):
+    pygame.draw.line(screen, (0,0,0), (SCREEN_W/2 - 10, SCREEN_H/2), (SCREEN_W/2 + 10, SCREEN_H/2), 2)
+    pygame.draw.line(screen, (0,0,0), (SCREEN_W/2, SCREEN_H/2 - 10), (SCREEN_W/2, SCREEN_H/2 + 10), 2)
+    screen.blit(gun, (28 * TILESIZE, 17 * TILESIZE))
+    pygame.draw.rect(screen, (0,255,0), (100, 764, health * 6, 32))
+    pygame.draw.rect(screen, (41, 46, 45), (100, 664, ammo * 6, 32))
+
+
+
 #pov_switch = 1
 while True:
     clock.tick(60)
@@ -21,19 +33,22 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-    p_pos = n.receive()
-    player1.x = p_pos[0]
-    player1.y = p_pos[1]
-    player1.update(screen, map)
-    n.send([player1.x, player1.y])
-    p2_pos = n.receive()
-    if p2_pos != "Waiting for other player" and p2_pos != None:
-        player2.x = p2_pos[0]
-        player2.y = p2_pos[1]
+    p_info = n.receive()
+    player1.x = p_info[0]
+    player1.y = p_info[1]
+    player1.hit = p_info[2]
+    player1.health = n.receive()
+    player1.update(map)
     raycaster.cast_rays(screen, ray, player1, player2, map)
+    print(player1.hit)
+    n.send([player1.x, player1.y, player1.health, player1.hit])
+    p2_info = n.receive()
+    if p2_info != "Waiting for other player" and p2_info != None:
+        player2.x = p2_info[0]
+        player2.y = p2_info[1]
     print("p1",player1.x, player1.y)
     print("p2",player2.x, player2.y)
-
-
+    print(player1.ammo)
+    draw_utils(gun2,screen, player1.health, player1.ammo)
 
     pygame.display.update()

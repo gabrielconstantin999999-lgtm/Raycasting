@@ -17,9 +17,14 @@ class Player:
         self.direction_x = None
         self.speed = 2
         self.sens = 0.1
-    def update(self,screen, map):
+        self.ammo = 25
+        self.health = None
+        self.hit = False
+        self.delay1 = pygame.time.get_ticks()
+    def update(self, map):
         free_mouse = False
         keys = pygame.key.get_pressed()
+        mouse_clicked = pygame.mouse.get_pressed()[0]
         if keys[pygame.K_ESCAPE]:
                free_mouse = True
                pygame.mouse.set_visible(True)
@@ -53,14 +58,21 @@ class Player:
                 if map.has_wall_at(int(self.y//TILESIZE), int(self.x//TILESIZE)):
                        self.x += math.cos(self.rotation_angle + 90*math.pi/180) * self.speed
                        self.y -= math.sin(self.rotation_angle + 90*math.pi/180) * self.speed
-        '''
-        if keys[pygame.K_a]:
-               self.x -= math.cos(self.rotation_angle + 90 * math.pi / 180) * self.speed
-               self.y += math.sin(self.rotation_angle + 90 * math.pi / 180) * self.speed
-        if keys[pygame.K_d]:
-               self.x += math.cos(self.rotation_angle - 90 * math.pi / 180) * self.speed
-               self.y += math.sin(self.rotation_angle - 90 * math.pi / 180) * self.speed
-               '''
+
+
+        if keys[pygame.K_r]:
+               self.ammo = 25
+        delay = 500
+        if mouse_clicked:
+               delay2 = pygame.time.get_ticks()
+               if delay2 - self.delay1 > delay:
+                self.ammo -= 1
+                self.delay1 = delay2
+        if self.ammo <= 0:
+              self.ammo = 0 
+
+
+
         if x_change >= prev_x:
                 self.rotation_angle += self.rotation * (x_change - prev_x) * self.sens
         if x_change <= prev_x:
@@ -68,8 +80,7 @@ class Player:
         self.rotation_angle %= 2 * math.pi
         #pygame.draw.circle(screen, (255,0,0), (self.x, self.y), 10)
         prev_x = x_change
-    
-   
+
        
 
 
