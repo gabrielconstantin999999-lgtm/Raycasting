@@ -2,7 +2,6 @@ import socket
 from _thread import *
 import pickle
 
-
 TILESIZE = 32
 server = "192.168.1.128"
 port = 52000
