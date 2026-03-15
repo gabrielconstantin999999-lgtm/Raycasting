@@ -21,7 +21,7 @@ def draw_utils(gun,screen, health, ammo):
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2 - 10, SCREEN_H/2), (SCREEN_W/2 + 10, SCREEN_H/2), 2)
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2, SCREEN_H/2 - 10), (SCREEN_W/2, SCREEN_H/2 + 10), 2)
     screen.blit(gun, (28 * TILESIZE, 17 * TILESIZE))
-    pygame.draw.rect(screen, (0,255,0), (100, 764, health * 6, 32))
+    #pygame.draw.rect(screen, (0,255,0), (100, 764, health * 6, 32))
     pygame.draw.rect(screen, (41, 46, 45), (100, 664, ammo * 6, 32))
 
 
@@ -37,11 +37,11 @@ while True:
     player1.x = p_info[0]
     player1.y = p_info[1]
     player1.hit = p_info[2]
-    player1.health = n.receive()
+    player1.health = p_info[3]
     player1.update(map)
     raycaster.cast_rays(screen, ray, player1, player2, map)
-    print(player1.hit)
-    n.send([player1.x, player1.y, player1.health, player1.hit])
+    draw_utils(gun2,screen, player1.health, player1.ammo)
+    n.send([player1.x, player1.y, player1.hit, player1.health])
     p2_info = n.receive()
     if p2_info != "Waiting for other player" and p2_info != None:
         player2.x = p2_info[0]
@@ -49,6 +49,6 @@ while True:
     print("p1",player1.x, player1.y)
     print("p2",player2.x, player2.y)
     print(player1.ammo)
-    draw_utils(gun2,screen, player1.health, player1.ammo)
+    
 
     pygame.display.update()
