@@ -14,7 +14,7 @@ ray = Ray()
 clock = pygame.time.Clock()
 raycaster = Raycaster()
 n = Network()
-gun = pygame.image.load(r"C:\Users\gabri\Documents\VSCode\Raycasting\raycasting_gun.png")
+gun = pygame.image.load(r"/home/gabriel9/Raycasting/raycasting_gun.png")
 gun2 = pygame.transform.scale(gun, (640, 320))
 
 def draw_utils(gun,screen, health, ammo):
@@ -33,22 +33,20 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-    p_info = n.receive()
-    player1.x = p_info[0]
-    player1.y = p_info[1]
-    player1.hit = p_info[2]
-    player1.health = p_info[3]
+    p_info = n.send([player1.x,player1.y,player1.hit])
     player1.update(map)
-    raycaster.cast_rays(screen, ray, player1, player2, map)
-    draw_utils(gun2,screen, player1.health, player1.ammo)
-    n.send([player1.x, player1.y, player1.hit, player1.health])
+    n.send([player1.x, player1.y, player1.hit])
+    player1.hit = False
     p2_info = n.receive()
     if p2_info != "Waiting for other player" and p2_info != None:
-        player2.x = p2_info[0]
-        player2.y = p2_info[1]
+        player2.x = p2_info[0][0]
+        player2.y = p2_info[0][1]
+        player1.health = p2_info[1]
+
     print("p1",player1.x, player1.y)
     print("p2",player2.x, player2.y)
     print(player1.ammo)
-    
+    raycaster.cast_rays(screen, ray, player1, player2, map)
+    draw_utils(gun2,screen, player1.health, player1.ammo)
 
     pygame.display.update()

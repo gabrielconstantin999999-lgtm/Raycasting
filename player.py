@@ -22,15 +22,14 @@ class Player:
         self.hit = False
         self.delay1 = pygame.time.get_ticks()
     def update(self, map):
-        free_mouse = False
         keys = pygame.key.get_pressed()
         mouse_clicked = pygame.mouse.get_pressed()[0]
         if keys[pygame.K_ESCAPE]:
-               free_mouse = True
+               pygame.event.set_grab(False)
                pygame.mouse.set_visible(True)
-        if free_mouse == False:
+        else:
+                pygame.event.set_grab(True)
                 pygame.mouse.set_visible(False)
-                pygame.mouse.set_pos(SCREEN_W/2, SCREEN_H/2)
                 
         x_change, y_change = pygame.mouse.get_rel()
         prev_x = 0
@@ -62,6 +61,7 @@ class Player:
 
         if keys[pygame.K_r]:
                self.ammo = 25
+               '''
         delay = 500
         if mouse_clicked:
                delay2 = pygame.time.get_ticks()
@@ -70,7 +70,7 @@ class Player:
                 self.delay1 = delay2
         if self.ammo <= 0:
               self.ammo = 0 
-
+'''
 
 
         if x_change >= prev_x:

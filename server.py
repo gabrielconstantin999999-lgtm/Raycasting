@@ -1,7 +1,6 @@
 import socket 
 from _thread import *
 import pickle
-import pygame
 
 
 TILESIZE = 32
@@ -15,36 +14,33 @@ s.bind((server,port))
 s.listen(2)
 print("Waiting.")
 
-players = [[22 * TILESIZE,5 * TILESIZE,False, 100],[24 * TILESIZE,7 * TILESIZE,False,100]]
-delay = 16
-delay1 = pygame.time.get_ticks()
+
+
+
+players = [[22*TILESIZE,5*TILESIZE,False],[25*TILESIZE,7*TILESIZE,False]]
+healths = [100,100]
 def threaded_client(conn, player_num):
     while True:
         try:
-            conn.sendall(pickle.dumps(players[player_num]))
             data = pickle.loads(conn.recv(4096))
+            players[player_num] = data
             if not data:
                 break
             if player_num == 0:
-                players[0] = data
-                if players[0][2]:
-                    delay2 = pygame.time.get_ticks()
-                    if delay2 - delay1 > delay:
-                        players[1][3] -= 20
-                        delay1 = delay2
+                if players[0][2] == True:
+                    healths[1] -= 5
                     players[0][2] = False
-                reply = players[1]
+                players[0] = data
+                reply = [players[1],healths[0]] 
             elif player_num == 1:
-                players[1] = data
-                if players[1][2]:
-                    delay2 = pygame.time.get_ticks()
-                    if delay2 - delay1 > delay:
-                        players[0][3] -= 20
-                        delay1 = delay2
+                if players[1][2] == True:
+                    healths[0] -= 20
                     players[1][2] = False
-                reply = players[0]
+                players[1] = data
+                reply = [players[0], healths[1]]
             print(players)
             conn.sendall(pickle.dumps(reply))
+            print(healths)
         except:
             break
             
