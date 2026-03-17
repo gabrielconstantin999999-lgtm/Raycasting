@@ -5,7 +5,7 @@ from player import Player
 from ray import Ray
 from raycaster import Raycaster
 from network import Network
-
+from button import Button
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
@@ -21,6 +21,9 @@ n = Network()
 gun = pygame.image.load(r"/home/gabriel9/Raycasting/raycasting_gun.png")
 gun2 = pygame.transform.scale(gun, (640, 320))
 
+game_state = "menu"
+
+
 def draw_utils(gun,screen, health, ammo):
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2 - 10, SCREEN_H/2), (SCREEN_W/2 + 10, SCREEN_H/2), 2)
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2, SCREEN_H/2 - 10), (SCREEN_W/2, SCREEN_H/2 + 10), 2)
@@ -30,15 +33,19 @@ def draw_utils(gun,screen, health, ammo):
 
 
 
-
+player_num = n.receive()
 while True:
     clock.tick(60)
     screen.fill((232, 195, 195))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            
-    p_info = n.send([player1.x,player1.y,player1.hit])
+
+    if game_state == "menu":
+        play_button = Button(100,100, SCREEN_W-200, SCREEN_H-200, (255,0,0))
+        play_button.draw(screen,"PLAY",(255,255,255))
+        if play_button.get_clicked():
+            game_state = "game"
     player1.update(map)
     n.send([player1.x, player1.y, player1.hit])
     player1.hit = False

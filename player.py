@@ -20,6 +20,7 @@ class Player:
         self.ammo = 25
         self.health = None
         self.hit = False
+        self.ready = True
         self.delay1 = pygame.time.get_ticks()
     def update(self, map):
         keys = pygame.key.get_pressed()
