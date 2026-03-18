@@ -16,7 +16,7 @@ player2 = Player(25, 7)
 ray = Ray()
 clock = pygame.time.Clock()
 raycaster = Raycaster()
-n = Network()
+n = None
 
 gun = pygame.image.load(r"/home/gabriel9/Raycasting/raycasting_gun.png")
 gun2 = pygame.transform.scale(gun, (640, 320))
@@ -33,30 +33,34 @@ def draw_utils(gun,screen, health, ammo):
 
 
 
-player_num = n.receive()
 while True:
     clock.tick(60)
     screen.fill((232, 195, 195))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-
     if game_state == "menu":
         play_button = Button(100,100, SCREEN_W-200, SCREEN_H-200, (255,0,0))
         play_button.draw(screen,"PLAY",(255,255,255))
         if play_button.get_clicked():
-            game_state = "game"
-    player1.update(map)
-    n.send([player1.x, player1.y, player1.hit])
-    player1.hit = False
+            game_state = "wait"
+    if game_state == "wait":
+        if n == None:
+            n = Network()
+        game_state = n.receive()
+    if game_state == "game":
+        game_state = n.receive()
+        player1.update(map)
+        n.send([player1.x, player1.y, player1.hit])
+        player1.hit = False
 
-    p2_info = n.receive()
-    if p2_info != None:
-        player2.x = p2_info[0][0]
-        player2.y = p2_info[0][1]
-        player1.health = p2_info[1]
+        p2_info = n.receive()
+        if p2_info != None:
+            player2.x = p2_info[0][0]
+            player2.y = p2_info[0][1]
+            player1.health = p2_info[1]
 
-    raycaster.cast_rays(screen, ray, player1, player2, map)
-    draw_utils(gun2,screen, player1.health, player1.ammo)
+        raycaster.cast_rays(screen, ray, player1, player2, map)
+        draw_utils(gun2,screen, player1.health, player1.ammo)
 
     pygame.display.update()
