@@ -23,7 +23,11 @@ gun2 = pygame.transform.scale(gun, (640, 320))
 
 game_state = "menu"
 
+play_button = Button(SCREEN_W/4,400, SCREEN_W/2, SCREEN_H/4, (255,188,117))
+title = Button(SCREEN_W/4,100, SCREEN_W/2, SCREEN_H/4, (255,188,117))
 
+p1_button = Button(SCREEN_W/4,100, 200, 200, (255,188,117))
+p2_button = Button(SCREEN_W*3/4,100, 200, 200, (255,188,117))
 def draw_utils(gun,screen, health, ammo):
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2 - 10, SCREEN_H/2), (SCREEN_W/2 + 10, SCREEN_H/2), 2)
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2, SCREEN_H/2 - 10), (SCREEN_W/2, SCREEN_H/2 + 10), 2)
@@ -35,12 +39,12 @@ def draw_utils(gun,screen, health, ammo):
 
 while True:
     clock.tick(60)
-    screen.fill((232, 195, 195))
+    screen.fill((117, 191, 255))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
     if game_state == "menu":
-        play_button = Button(100,100, SCREEN_W-200, SCREEN_H-200, (255,0,0))
+        title.draw(screen,"BAGNITSACYAR", (255,255,255))
         play_button.draw(screen,"PLAY",(255,255,255))
         if play_button.get_clicked():
             game_state = "wait"
@@ -49,6 +53,11 @@ while True:
             n = Network()
         n.send(game_state)
         game_state = n.receive()
+        p1_button.draw(screen,"YOU",(255,255,255))
+        if game_state == "wait":
+            p2_button.draw(screen,"WAITING...",(255,255,255))
+        if game_state == "game":
+            p2_button.draw(screen,"FOUND",(255,255,255))
     if game_state == "game":
         player1.update(map)
         n.send([player1.x, player1.y, player1.hit])

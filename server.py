@@ -1,6 +1,8 @@
 import socket 
 from _thread import *
 import pickle
+import time
+
 
 TILESIZE = 32
 server = "192.168.1.128"
