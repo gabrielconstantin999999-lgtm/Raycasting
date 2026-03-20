@@ -21,8 +21,12 @@ ready = [False,False]
 def threaded_client(conn, player_num):
     while True:
         try:
-            if player_num >= 1:
-                conn.sendall(pickle.dumps("game"))
+            if not ready[0] or not ready[1]:
+                state = pickle.loads(conn.recv(4096))
+                if state == "wait": ready[player_num] = True
+                if ready[0] and ready[1]: conn.sendall(pickle.dumps("game"))
+                else: conn.sendall(pickle.dumps("wait"))
+            if ready[0] and ready[1]:
                 data = pickle.loads(conn.recv(4096))
                 players[player_num] = data
                 if not data:
@@ -42,9 +46,8 @@ def threaded_client(conn, player_num):
                 print(players)
                 conn.sendall(pickle.dumps(reply))
                 print(healths)
-            else:
-                conn.sendall(pickle.dumps("wait"))
-        except:
+        except socket.error as e:
+            print(e)
             break
     player_num -= 1
     conn.close()

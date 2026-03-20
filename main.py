@@ -47,9 +47,9 @@ while True:
     if game_state == "wait":
         if n == None:
             n = Network()
+        n.send(game_state)
         game_state = n.receive()
     if game_state == "game":
-        game_state = n.receive()
         player1.update(map)
         n.send([player1.x, player1.y, player1.hit])
         player1.hit = False
