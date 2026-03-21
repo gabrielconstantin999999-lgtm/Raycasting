@@ -26,15 +26,21 @@ game_state = "menu"
 play_button = Button(SCREEN_W/4,400, SCREEN_W/2, SCREEN_H/4, (255,188,117))
 title = Button(SCREEN_W/4,100, SCREEN_W/2, SCREEN_H/4, (255,188,117))
 
-p1_button = Button(SCREEN_W/4,100, 200, 200, (255,188,117))
-p2_button = Button(SCREEN_W*3/4,100, 200, 200, (255,188,117))
-def draw_utils(gun,screen, health, ammo):
+p1_button = Button(SCREEN_W/4,100, 250, 250, (255,188,117))
+p2_button = Button(SCREEN_W*3/4,100, 250, 250, (255,188,117))
+
+score_button = Button(SCREEN_W/2-25,10, 75, 40, (255,188,117))
+
+timer_button = Button(SCREEN_W/4,100, 250, 250, (255,188,117))
+
+
+def draw_utils(gun,screen, health, ammo,score):
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2 - 10, SCREEN_H/2), (SCREEN_W/2 + 10, SCREEN_H/2), 2)
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2, SCREEN_H/2 - 10), (SCREEN_W/2, SCREEN_H/2 + 10), 2)
     screen.blit(gun, (28 * TILESIZE, 17 * TILESIZE))
     pygame.draw.rect(screen, (0,255,0), (100, 764, health * 6, 32))
     pygame.draw.rect(screen, (41, 46, 45), (100, 664, ammo * 6, 32))
-
+    score_button.draw(screen, f"{score[0]}-{score[1]}",(255,255,255))
 
 
 while True:
@@ -68,8 +74,12 @@ while True:
             player2.x = p2_info[0][0]
             player2.y = p2_info[0][1]
             player1.health = p2_info[1]
+            score = p2_info[2]
+
 
         raycaster.cast_rays(screen, ray, player1, player2, map)
-        draw_utils(gun2,screen, player1.health, player1.ammo)
+        draw_utils(gun2,screen, player1.health, player1.ammo,score)
 
+        #if player1.health <= 0:
+         #   player1 = Player(22, 5)
     pygame.display.update()

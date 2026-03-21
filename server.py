@@ -18,16 +18,26 @@ print("Waiting.")
 
 
 players = [[22*TILESIZE,5*TILESIZE,False],[25*TILESIZE,7*TILESIZE,False]]
+
 healths = [100,100]
+
 ready = [False,False]
+
+score1 = 0
+score2 = 0
+
+reset = False
+
 def threaded_client(conn, player_num):
     while True:
         try:
             if not ready[0] or not ready[1]:
                 state = pickle.loads(conn.recv(4096))
                 if state == "wait": ready[player_num] = True
-                if ready[0] and ready[1]: conn.sendall(pickle.dumps("game"))
-                else: conn.sendall(pickle.dumps("wait"))
+                if ready[0] and ready[1]:
+                    conn.sendall(pickle.dumps("game"))
+                else: 
+                    conn.sendall(pickle.dumps("wait"))
             if ready[0] and ready[1]:
                 data = pickle.loads(conn.recv(4096))
                 players[player_num] = data
@@ -38,16 +48,18 @@ def threaded_client(conn, player_num):
                         healths[1] -= 5
                         players[0][2] = False
                     players[0] = data
-                    reply = [players[1],healths[0]] 
+                    reply = [players[1],healths[0],[score1,score2]] 
                 elif player_num == 1:
                     if players[1][2] == True:
                         healths[0] -= 5
                         players[1][2] = False
                     players[1] = data
-                    reply = [players[0], healths[1]]
+                    reply = [players[0], healths[1],[score2,score1]]
                 print(players)
                 conn.sendall(pickle.dumps(reply))
                 print(healths)
+                #if healths[0] <= 0 or healths[1] <= 0:
+                 #   healths = [100,100]
         except socket.error as e:
             print(e)
             break
