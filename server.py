@@ -23,12 +23,12 @@ healths = [100,100]
 
 ready = [False,False]
 
-score1 = 0
-score2 = 0
+score = [0,0]
 
 reset = False
 
 def threaded_client(conn, player_num):
+    global reset, healths, score
     while True:
         try:
             if not ready[0] or not ready[1]:
@@ -48,18 +48,33 @@ def threaded_client(conn, player_num):
                         healths[1] -= 5
                         players[0][2] = False
                     players[0] = data
-                    reply = [players[1],healths[0],[score1,score2]] 
+                    if healths[0] <= 0:
+                        score[1] += 1
+                        reset = True
+                        healths = [100,100]
+                    if healths[1] <= 0:
+                        score[0] += 1
+                        reset = True
+                        healths = [100,100]
+                    reply = [players[1],healths[0],[score[0],score[1]],reset]
                 elif player_num == 1:
                     if players[1][2] == True:
                         healths[0] -= 5
                         players[1][2] = False
                     players[1] = data
-                    reply = [players[0], healths[1],[score2,score1]]
+                    if healths[0] <= 0:
+                        score[1] += 1
+                        reset = True
+                        healths = [100,100]
+                    if healths[1] <= 0:
+                        score[0] += 1
+                        reset = True
+                        healths = [100,100]
+                    reply = [players[0], healths[1],[score[1],score[0]],reset]
                 print(players)
                 conn.sendall(pickle.dumps(reply))
                 print(healths)
-                #if healths[0] <= 0 or healths[1] <= 0:
-                 #   healths = [100,100]
+                reset = False
         except socket.error as e:
             print(e)
             break

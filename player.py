@@ -18,7 +18,7 @@ class Player:
         self.speed = 2
         self.sens = 0.1
         self.ammo = 25
-        self.health = None
+        self.health = 100
         self.hit = False
         self.ready = True
         self.delay1 = pygame.time.get_ticks()
@@ -81,6 +81,7 @@ class Player:
         self.rotation_angle %= 2 * math.pi
         #pygame.draw.circle(screen, (255,0,0), (self.x, self.y), 10)
         prev_x = x_change
+
 
        
 

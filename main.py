@@ -6,19 +6,36 @@ from ray import Ray
 from raycaster import Raycaster
 from network import Network
 from button import Button
+import random
+
+
+
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_W, SCREEN_H))
 
 map = Map()
-player1 = Player(22, 5)
-player2 = Player(25, 7)
+player2 = Player(25,7)
 ray = Ray()
 clock = pygame.time.Clock()
 raycaster = Raycaster()
 n = None
 
-gun = pygame.image.load(r"/home/gabriel9/Raycasting/raycasting_gun.png")
+
+def random_pos(map):
+    while True:
+        player_x = random.randint(1,47)
+        player_y = random.randint(1,26)
+        if not map.has_wall_at(player_y,player_x):
+            return player_x,player_y
+
+
+x,y = random_pos(map)
+player1 = Player(x,y)
+
+#gun = pygame.image.load(r"/home/gabriel9/Raycasting/raycasting_gun.png")
+gun = pygame.image.load("raycasting_gun.png")
+
 gun2 = pygame.transform.scale(gun, (640, 320))
 
 game_state = "menu"
@@ -38,6 +55,7 @@ def draw_utils(gun,screen, health, ammo,score):
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2 - 10, SCREEN_H/2), (SCREEN_W/2 + 10, SCREEN_H/2), 2)
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2, SCREEN_H/2 - 10), (SCREEN_W/2, SCREEN_H/2 + 10), 2)
     screen.blit(gun, (28 * TILESIZE, 17 * TILESIZE))
+    if health <= 0: health = 0
     pygame.draw.rect(screen, (0,255,0), (100, 764, health * 6, 32))
     pygame.draw.rect(screen, (41, 46, 45), (100, 664, ammo * 6, 32))
     score_button.draw(screen, f"{score[0]}-{score[1]}",(255,255,255))
@@ -54,7 +72,7 @@ while True:
         play_button.draw(screen,"PLAY",(255,255,255))
         if play_button.get_clicked():
             game_state = "wait"
-    if game_state == "wait":
+    elif game_state == "wait":
         if n == None:
             n = Network()
         n.send(game_state)
@@ -64,7 +82,7 @@ while True:
             p2_button.draw(screen,"WAITING...",(255,255,255))
         if game_state == "game":
             p2_button.draw(screen,"FOUND",(255,255,255))
-    if game_state == "game":
+    elif game_state == "game":
         player1.update(map)
         n.send([player1.x, player1.y, player1.hit])
         player1.hit = False
@@ -75,6 +93,13 @@ while True:
             player2.y = p2_info[0][1]
             player1.health = p2_info[1]
             score = p2_info[2]
+            reset = p2_info[3]
+
+            if reset:
+                x,y = random_pos(map)
+                #player1 = Player(x,y)
+                player1.x = x * TILESIZE
+                player1.y = y * TILESIZE
 
 
         raycaster.cast_rays(screen, ray, player1, player2, map)

@@ -13,7 +13,7 @@ class Ray:
         self.direction_y = None
         self.hd = float('inf')
         self.vd = float('inf')
-        self.image = pygame.image.load(r"/home/gabriel9/Raycasting/raycastplayer.png")
+        self.image = pygame.image.load("raycastplayer.png")
         self.hit = False
         self.delay1 = pygame.time.get_ticks()
         self.delay = 250
@@ -174,8 +174,9 @@ class Ray:
                 if mouse_clicked:
                     delay2 = pygame.time.get_ticks()
                     if col_start < crosshair[0] < col_start + width and top_y < crosshair[1] < top_y + height and dist < wall_distances[wall_idx] and delay2-self.delay1>self.delay:
-                        test = text_font.render(f"nigga", True, (0,0,0))
-                        screen.blit(test, (500, 500))
+                        #test = text_font.render(f"nigga", True, (0,0,0))
+                        #screen.blit(test, (500, 500))
+                        pygame.draw.line(screen,(0,0,0),(SCREEN_W/2 - 30, SCREEN_H/2 - 30),(SCREEN_W/2 + 30, SCREEN_H/2 + 30),2)
                         player.hit = True
                         player.ammo -= 1
                         self.delay1 = delay2

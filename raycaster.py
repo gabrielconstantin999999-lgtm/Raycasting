@@ -15,11 +15,10 @@ class Raycaster:
 
             corrected = ray.distance * math.cos(angle - player.rotation_angle)
             wall_distances.append(corrected)
-
+            if corrected == 0: corrected += 0.001
             line_height = SCREEN_H / corrected * TILESIZE
             line_width = SCREEN_W / NUM_RAYS
             color = max(0, min(255, 255 - corrected/2))
-
             if ray.v:
                 c = min(255, int(color * 2))
                 pygame.draw.rect(screen, (c, c, c), (x * line_width, SCREEN_H/2 - line_height/2, line_width, line_height))
