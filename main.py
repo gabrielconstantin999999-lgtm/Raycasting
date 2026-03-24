@@ -43,6 +43,7 @@ game_state = "menu"
 play_button = Button(SCREEN_W/4,400, SCREEN_W/2, SCREEN_H/4, (255,188,117))
 title = Button(SCREEN_W/4,100, SCREEN_W/2, SCREEN_H/4, (255,188,117))
 
+
 p1_button = Button(SCREEN_W/4,100, 250, 250, (255,188,117))
 p2_button = Button(SCREEN_W*3/4,100, 250, 250, (255,188,117))
 
@@ -52,6 +53,7 @@ timer_button = Button(SCREEN_W/4,100, 250, 250, (255,188,117))
 
 
 def draw_utils(gun,screen, health, ammo,score):
+
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2 - 10, SCREEN_H/2), (SCREEN_W/2 + 10, SCREEN_H/2), 2)
     pygame.draw.line(screen, (0,0,0), (SCREEN_W/2, SCREEN_H/2 - 10), (SCREEN_W/2, SCREEN_H/2 + 10), 2)
     screen.blit(gun, (28 * TILESIZE, 17 * TILESIZE))
