@@ -35,8 +35,8 @@ player1 = Player(x,y)
 
 #gun = pygame.image.load(r"/home/gabriel9/Raycasting/raycasting_gun.png")
 gun = pygame.image.load("raycasting_gun.png")
-
 gun2 = pygame.transform.scale(gun, (640, 320))
+
 
 game_state = "menu"
 

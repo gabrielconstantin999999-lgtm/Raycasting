@@ -176,7 +176,8 @@ class Ray:
                     if col_start < crosshair[0] < col_start + width and top_y < crosshair[1] < top_y + height and dist < wall_distances[wall_idx] and delay2-self.delay1>self.delay:
                         #test = text_font.render(f"nigga", True, (0,0,0))
                         #screen.blit(test, (500, 500))
-                        pygame.draw.line(screen,(0,0,0),(SCREEN_W/2 - 30, SCREEN_H/2 - 30),(SCREEN_W/2 + 30, SCREEN_H/2 + 30),2)
+                        pygame.draw.line(screen,(0,0,0),(SCREEN_W/2 - 30, SCREEN_H/2),(SCREEN_W/2 + 30, SCREEN_H/2),2)
+                        pygame.draw.line(screen,(0,0,0),(SCREEN_W/2, SCREEN_H/2 - 30),(SCREEN_W/2, SCREEN_H/2 + 30),2)
                         player.hit = True
                         player.ammo -= 1
                         self.delay1 = delay2
